@@ -4,4 +4,6 @@ The [Advent of Code](https://adventofcode.com/) challeneges you to complete codi
 
 All the code written for this challenege is using Python 3.7.3 for the 2019 Advent of Code challenege.
 
+Also, as an exercise in writting clean, production-ready code, I have decided to use both type annotations and assert testing. Type annotations are valid starting with Python 3.6. Assert testing is based on the examples and expected results provided.
+
 Enjoy!
