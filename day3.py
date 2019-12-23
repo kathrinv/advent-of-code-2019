@@ -98,8 +98,10 @@ def get_intersections(wire1_locs: List[tuple], wire2_locs: List[tuple]) -> List[
         the intersection points of the wires
     """
     cross_points = []
-    for loc in wire1_locs:
-        if loc in wire2_locs:
+    wire1_locs_set = set(wire1_locs)
+    wire2_locs_set = set(wire2_locs)
+    for loc in wire1_locs_set:
+        if loc in wire2_locs_set:
             cross_points.append(loc)
     return cross_points
 
@@ -124,6 +126,17 @@ def get_shortest_distance(intersections: List[tuple]) -> int:
         if distance != 0:
             distances.append(distance)
     return min(distances)
+
+def get_shortest_steps(intersections: List[tuple], wire1_locs: List[tuple], wire2_locs: List[tuple]) -> int:
+    num_steps = []
+    for intersection in intersections:
+        if intersection == (0,0):
+            continue
+        else:
+            wire1_steps = wire1_locs.index(intersection)
+            wire2_steps = wire2_locs.index(intersection)
+            num_steps.append(wire1_steps + wire2_steps)
+    return min(num_steps)
 
 def day3(part2: bool = False, input_filename: str = 'input3.txt', wire1 = None, wire2 = None) -> int:
     """
@@ -153,10 +166,13 @@ def day3(part2: bool = False, input_filename: str = 'input3.txt', wire1 = None, 
     """
     if (not wire1) or (not wire2):
         wire1, wire2 = load_day3_input(input_filename)
-    wire1_locs = set(get_all_wire_locations(wire1))
-    wire2_locs = set(get_all_wire_locations(wire2))
+    wire1_locs = get_all_wire_locations(wire1)
+    wire2_locs = get_all_wire_locations(wire2)
     intersections = get_intersections(wire1_locs, wire2_locs)
-    min_distance = get_shortest_distance(intersections)
+    if not part2:
+        min_distance = get_shortest_distance(intersections)
+    else:
+        min_distance = get_shortest_steps(intersections, wire1_locs, wire2_locs)
     return min_distance
 
 # Day 3 Part 1 Testing - Manhattan Distance calculation
@@ -169,7 +185,7 @@ wire2_sample2 = ['U98','R91','D20','R16','D67','R40','U7','R15','U6','R7']
 assert day3(wire1 = wire1_sample2, wire2 = wire2_sample2) == 135, "Calculation of minimum distance of wire intersections from source is incorrect"
 
 answer_part1 = day3()
-# answer_part2 = day2(part2=True)
+answer_part2 = day3(part2=True)
 
 print(f'The result to part 1 is: {answer_part1}')
-# print(f'The result to part 2 is: {answer_part2}')
+print(f'The result to part 2 is: {answer_part2}')
