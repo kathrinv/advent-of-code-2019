@@ -82,25 +82,75 @@ def num_ones_times_num_twos(layer: List[int]) -> int:
          layer: Pixel values of an image layer
     
     Returns:
-        The values of the layer with least zeros
+        The number of 1 digits multiplied
+        by the number of 2 digits in an
+        image layer
         
     """
     num_ones = sum([1 for num in layer if num == 1])
     num_twos = sum([1 for num in layer if num == 2])
     return num_ones * num_twos
 
+
+def decode_image(layers: List[int]) -> List[int]:
+    """
+    Prints out decoded image
+    based on topmost visible pixel
+    value.
+    
+    Args:
+        layers: A list of layers, with each layer
+                 a list of int representing the 
+                 color of each pixel
+    
+    Returns:
+        A formatted image showing a
+        message
+    
+    """
+    image = []
+    for i in range(len(layers[0])):
+        for j in range(len(layers)):
+            if layers[j][i] == 0:
+                image.append(' ')
+                break
+            elif layers[j][i] == 1:
+                image.append('X')
+                break
+            else:
+                continue # pixel is transparent
+    formatted_image = []
+    for k in range(0, 150, 25):
+        
+        formatted_image.append(''.join(image[k:k+25]))
+    return formatted_image
+
+
 def day8(filename: str = 'input8.txt', part2: bool = False):
-    if not part2: 
-        image = load_day8_input(filename)
-        layers = split_into_layers(image)
+    """
+    Confirms correct image transmission
+    by returning the number of 1 digits
+    multiplied by the number of 2 digits
+    in the image layer with the least
+    amount of zeros.
+    
+    Change arguement 'part2' to True
+    if image transmission was correct
+    to decode the image.
+    """
+    image = load_day8_input(filename)
+    layers = split_into_layers(image)
+    if not part2:
         layer_with_least_zeros = find_layer_with_least_zeros(layers)
         result = num_ones_times_num_twos(layer_with_least_zeros)
         return result
+    else:
+        return decode_image(layers)
 
 
-    
 answer_part1 = day8()
-# answer_part2 = day4(part2=True)
+answer_part2 = day8(part2=True)
 
 print(f'The result to part 1 is: {answer_part1}')
-# print(f'The result to part 2 is: {answer_part2}')
+print(f'The result to part 2 is:')
+pp.pprint(answer_part2)
